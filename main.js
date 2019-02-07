@@ -1,7 +1,7 @@
 var config = {
     type: Phaser.AUTO,
     width: 800,
-    height: 600,
+    height: 400,
     physics: {
         default: 'arcade',
         arcade: {
@@ -39,13 +39,13 @@ function create ()
 
     platforms = this.physics.add.staticGroup();
 
-    platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+    platforms.create(400, 400, 'ground').setScale(2).refreshBody();
 
-    platforms.create(600, 400, 'ground');
-    platforms.create(50, 250, 'ground');
-    platforms.create(750, 220, 'ground');
+    platforms.create(600, 260, 'ground');
+    platforms.create(50, 160, 'ground');
+    platforms.create(750, 150, 'ground');
 
-    player = this.physics.add.sprite(100, 450, 'dude');
+    player = this.physics.add.sprite(100, 250, 'dude');
 
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
@@ -124,7 +124,7 @@ function update ()
 
     if (cursors.up.isDown && player.body.touching.down)
     {
-        player.setVelocityY(-480);
+        player.setVelocityY(-400);
     }
 }
 function collectStar (player, star)
