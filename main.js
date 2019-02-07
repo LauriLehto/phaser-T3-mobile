@@ -184,8 +184,3 @@ function stop (player) {
 
     player.anims.play('turn');
 }
-
-function itemTouched(pointer) {
-    console.log(pointer)
-    // do something
-}
