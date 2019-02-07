@@ -20,9 +20,6 @@ let game = new Phaser.Game(config);
 let touchStart = {}
 let touchEnd = {}
 
-// document.addEventListener("touchstart", touchHandler);
-// document.addEventListener("touchmove", touchHandler);
-
 var score = 0;
 var scoreText;
 
@@ -81,10 +78,6 @@ function create ()
 
     cursors = this.input.keyboard.createCursorKeys();
 
-    // game.input.onDown.add(itemTouched, this);
-
-    // pointer = this.input.activePointer
-
     stars = this.physics.add.group({
         key: 'star',
         repeat: 11,
@@ -118,7 +111,6 @@ function update ()
     }
 
     if (game.input.activePointer.justUp) {
-        // console.log(game.input.activePointer)
         touchEnd.x = game.input.activePointer.upX
         touchEnd.y = game.input.activePointer.upY
         if(Math.abs(touchStart.x-touchEnd.x)>Math.abs(touchStart.y-touchEnd.y)){
@@ -130,32 +122,10 @@ function update ()
         }
         else if(Math.abs(touchStart.y-touchEnd.y)>5) {
             jump(player)
-            console.log('up')
         } else {
             stop(player)
         }
-        // console.log(touchStart.x-touchEnd.x, touchStart.y-touchEnd.y)
-
-
     }
-
-    // if (cursors.left.isDown)
-    // {
-    //    goLeft(player)
-    // }
-    // else if (cursors.right.isDown)
-    // {
-    //     goRight(player)
-    // }
-    // else
-    // {
-    //    stop(player)
-    // }
-
-    // if (cursors.up.isDown && player.body.touching.down)
-    // {
-    //     jump(player)
-    // }
 }
 function collectStar (player, star)
 {
@@ -206,7 +176,7 @@ function goRight (player) {
 }
 
 function jump (player) {
-    player.setVelocityY(-400);
+    player.setVelocityY(-410);
 }
 
 function stop (player) {
@@ -214,17 +184,6 @@ function stop (player) {
 
     player.anims.play('turn');
 }
-
-// function touchHandler(e) {
-//     if(e.touches) {
-//         console.log(e.touches[0])
-//         playerX = e.touches[0].pageX - canvas.offsetLeft - playerWidth / 2;
-//         playerY = e.touches[0].pageY - canvas.offsetTop - playerHeight / 2;
-//         output.innerHTML = "Touch: "+ " x: " + playerX + ", y: " + playerY;
-//         console.log("Touch: "+ " x: " + playerX + ", y: " + playerY)
-//         e.preventDefault();
-//     }
-// }
 
 function itemTouched(pointer) {
     console.log(pointer)
