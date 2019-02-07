@@ -16,7 +16,12 @@ var config = {
     }
 };
 
-var game = new Phaser.Game(config);
+let game = new Phaser.Game(config);
+let touchStart = {}
+let touchEnd = {}
+
+// document.addEventListener("touchstart", touchHandler);
+// document.addEventListener("touchmove", touchHandler);
 
 var score = 0;
 var scoreText;
@@ -43,7 +48,7 @@ function create ()
 
     platforms.create(600, 260, 'ground');
     platforms.create(50, 160, 'ground');
-    platforms.create(750, 150, 'ground');
+    platforms.create(750, 130, 'ground');
 
     player = this.physics.add.sprite(100, 250, 'dude');
 
@@ -76,6 +81,10 @@ function create ()
 
     cursors = this.input.keyboard.createCursorKeys();
 
+    // game.input.onDown.add(itemTouched, this);
+
+    // pointer = this.input.activePointer
+
     stars = this.physics.add.group({
         key: 'star',
         repeat: 11,
@@ -103,29 +112,50 @@ function create ()
 
 function update ()
 {
-    if (cursors.left.isDown)
-    {
-        player.setVelocityX(-160);
-
-        player.anims.play('left', true);
-    }
-    else if (cursors.right.isDown)
-    {
-        player.setVelocityX(160);
-
-        player.anims.play('right', true);
-    }
-    else
-    {
-        player.setVelocityX(0);
-
-        player.anims.play('turn');
+    if (game.input.activePointer.justDown) {
+        touchStart.x = game.input.activePointer.downX
+        touchStart.y = game.input.activePointer.downY
     }
 
-    if (cursors.up.isDown && player.body.touching.down)
-    {
-        player.setVelocityY(-400);
+    if (game.input.activePointer.justUp) {
+        // console.log(game.input.activePointer)
+        touchEnd.x = game.input.activePointer.upX
+        touchEnd.y = game.input.activePointer.upY
+        if(Math.abs(touchStart.x-touchEnd.x)>Math.abs(touchStart.y-touchEnd.y)){
+            if(touchStart.x-touchEnd.x<0){
+                goRight(player)
+            } else {
+                goLeft(player)
+            }
+        }
+        else if(Math.abs(touchStart.y-touchEnd.y)>5) {
+            jump(player)
+            console.log('up')
+        } else {
+            stop(player)
+        }
+        // console.log(touchStart.x-touchEnd.x, touchStart.y-touchEnd.y)
+
+
     }
+
+    // if (cursors.left.isDown)
+    // {
+    //    goLeft(player)
+    // }
+    // else if (cursors.right.isDown)
+    // {
+    //     goRight(player)
+    // }
+    // else
+    // {
+    //    stop(player)
+    // }
+
+    // if (cursors.up.isDown && player.body.touching.down)
+    // {
+    //     jump(player)
+    // }
 }
 function collectStar (player, star)
 {
@@ -151,6 +181,7 @@ function collectStar (player, star)
 
     }
 }
+
 function hitBomb (player, bomb)
 {
     this.physics.pause();
@@ -160,4 +191,42 @@ function hitBomb (player, bomb)
     player.anims.play('turn');
 
     gameOver = true;
+}
+
+function goLeft (player) {
+    player.setVelocityX(-160);
+
+    player.anims.play('left', true);
+}
+
+function goRight (player) {
+    player.setVelocityX(160);
+
+    player.anims.play('right', true);
+}
+
+function jump (player) {
+    player.setVelocityY(-400);
+}
+
+function stop (player) {
+    player.setVelocityX(0);
+
+    player.anims.play('turn');
+}
+
+// function touchHandler(e) {
+//     if(e.touches) {
+//         console.log(e.touches[0])
+//         playerX = e.touches[0].pageX - canvas.offsetLeft - playerWidth / 2;
+//         playerY = e.touches[0].pageY - canvas.offsetTop - playerHeight / 2;
+//         output.innerHTML = "Touch: "+ " x: " + playerX + ", y: " + playerY;
+//         console.log("Touch: "+ " x: " + playerX + ", y: " + playerY)
+//         e.preventDefault();
+//     }
+// }
+
+function itemTouched(pointer) {
+    console.log(pointer)
+    // do something
 }
